@@ -44,9 +44,11 @@ import net.runelite.api.gameval.NpcID;
 import net.runelite.api.gameval.ObjectID;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.util.LinkBrowser;
 
 @Slf4j
 @PluginDescriptor(
@@ -333,6 +335,17 @@ public class BrainlessMolaniskPlugin extends Plugin
 	public void onGroundObjectDespawned(GroundObjectDespawned e)
 	{
 		wallDespawned(e.getGroundObject(), "ground");
+	}
+
+	@Subscribe
+	public void onConfigChanged(ConfigChanged e)
+	{
+		if (BrainlessMolaniskConfig.GROUP.equals(e.getGroup()) && BrainlessMolaniskConfig.OPEN_DISCORD.equals(e.getKey())
+			&& Boolean.parseBoolean(e.getNewValue()))
+		{
+			LinkBrowser.browse(BrainlessMolaniskConfig.DISCORD_URL);
+			configManager.setConfiguration(BrainlessMolaniskConfig.GROUP, BrainlessMolaniskConfig.OPEN_DISCORD, false);
+		}
 	}
 
 	@Subscribe

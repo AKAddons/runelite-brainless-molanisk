@@ -11,6 +11,15 @@ public interface BrainlessMolaniskConfig extends Config
 {
 	String GROUP = "brainlessmolanisk";
 	String LEARNED_SPOTS = "learnedSpots";
+	String OPEN_DISCORD = "openDiscord";
+	String DISCORD_URL = "https://discord.gg/6GuS6J8em3";
+
+	/** A settings page cannot hold a link; ticking this opens the invite and the plugin unticks it. */
+	@ConfigItem(keyName = OPEN_DISCORD, name = "Join the Discord", description = "Opens the AK Addons Discord invite in your browser", position = 0)
+	default boolean openDiscord()
+	{
+		return false;
+	}
 
 	/** Ring tiles learned per spawn (SpotBook format). Seeded with the two rings of 2026-10-22. */
 	@ConfigItem(keyName = LEARNED_SPOTS, name = "", description = "", hidden = true)
