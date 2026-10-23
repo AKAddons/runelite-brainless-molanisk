@@ -20,4 +20,7 @@ jobs:
     with:
       project_name: "Brainless Molanisk"
       project_description: "RuneLite - highlights the one thing to click next on a molanisk task: the molanisk, the tile to ring from, or the slayer bell"
-    secrets: inherit
+    # Named, not inherit: inherit does not cross from the AKAddons org to ajkatz/discord-hub.
+    secrets:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
