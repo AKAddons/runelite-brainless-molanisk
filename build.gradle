@@ -1,0 +1,55 @@
+plugins {
+	id 'java'
+}
+
+repositories {
+	mavenLocal()
+	maven {
+		url = 'https://repo.runelite.net'
+		content {
+			includeGroupByRegex("net\\.runelite.*")
+		}
+	}
+	mavenCentral()
+}
+
+def runeLiteVersion = 'latest.release'
+def pluginMainClass = 'com.brainlessmolanisk.BrainlessMolaniskPluginTest'
+
+dependencies {
+	compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
+
+	compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+
+	testImplementation group: 'net.runelite', name:'client', version: runeLiteVersion
+	testImplementation group: 'net.runelite', name:'jshell', version: runeLiteVersion
+}
+
+tasks.named('test', Test) {
+	useJUnitPlatform()
+}
+
+group = 'com.brainlessmolanisk'
+version = '0.1.0'
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	options.release.set(11)
+	// The Plugin Hub rejects deprecated API use; surface it at every build.
+	options.compilerArgs << '-Xlint:deprecation'
+}
+
+tasks.register('run', JavaExec) {
+	classpath = sourceSets.test.runtimeClasspath
+	mainClass = pluginMainClass
+
+	jvmArgs "-ea",
+		"--add-opens=java.desktop/com.apple.eawt=ALL-UNNAMED",
+		"--add-opens=java.base/java.net=ALL-UNNAMED",
+		"--add-opens=java.base/java.io=ALL-UNNAMED"
+	args "--developer-mode", "--debug"
+}
